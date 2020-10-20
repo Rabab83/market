@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "737283287738",
+    "firebase_url": "https://marketapp-ba5f5.firebaseio.com",
+    "project_id": "marketapp-ba5f5",
+    "storage_bucket": "marketapp-ba5f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737283287738:android:0573a0236038f50e953083",
+        "android_client_info": {
+          "package_name": "com.example.marketApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737283287738-bg9v4tr7p1bkauk4acdac77f6m74018u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRbh0O6uPaR1j6aPzBfN3ro9g-XPwNmok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737283287738-bg9v4tr7p1bkauk4acdac77f6m74018u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
