@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:marketApp/model/classes.dart';
-import 'package:marketApp/screen/brandFiles/brandOpretion/tasks/viewEventDetaild.dart';
+import 'package:marketApp/screen/brandFiles/brandOpretion/tasks/viewTaskDetails.dart';
 import 'package:marketApp/services/crudFunctions.dart';
 import 'package:table_calendar/table_calendar.dart';
 

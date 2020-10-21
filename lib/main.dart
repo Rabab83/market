@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:marketApp/app/landing_page.dart';
-import 'package:marketApp/screen/brandFiles/brandOpretion/tasks/addEvent.dart';
 import 'package:marketApp/screen/pages/dashBoard.dart';
 import 'package:marketApp/services/auth.dart';
 
