@@ -74,10 +74,14 @@ class NewTaskDB {
     return brandTasks;
   }
 
-  Future<void> addNewTask(TaskModel taskModel) {
-    return _db.collection('tasks')
-           .doc(taskModel.aBid) 
-           .set(taskModel.toTask());
+  // Future<void> addNewTask(TaskModel taskModel) {
+  //   return _db.collection('tasks')
+  //          .doc(taskModel.aBid) 
+  //          .set(taskModel.toTask());
+  // }
+   Future<void> addNewTask(TaskModel taskModel) {
+    return _db.collection('tasks')           
+           .add(taskModel.toTask());
   }
 
   Future<void> deleteTask(String id) {
@@ -88,13 +92,13 @@ class NewTaskDB {
     return _db
         .collection('tasks')
         .doc(taskModel.aBid)
-        .update(taskModel.toTask());
+        .set(taskModel.toTask());
   }
 }
 
 //************************************************************************//
 //************************************************************************//
-//Account Breif CRUD Functions
+       //Account Breif CRUD Functions
 
 class NewAccountBreifDB {
   NewAccountBreifDB._internal();

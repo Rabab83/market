@@ -47,7 +47,7 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
   }
 
   // Function that returns the same date Tasks
-  Map<DateTime, List<dynamic>> _groupTasks(List<TaskModel> tasks) {
+  Map<DateTime, List<dynamic>> _groupTasks(List<dynamic> tasks) {
     Map<DateTime, List<dynamic>> data = {};
     tasks.forEach((task) {
       DateTime date = DateTime(
@@ -64,13 +64,12 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
       appBar: AppBar(
         title: Text('Brand Tasks Calender'),
       ),
-      body: FutureBuilder<List<TaskModel>>(
+      body: FutureBuilder<List<dynamic>>(
         // stream: newTaskDB.streamList(),
         future: NewTaskDB().getBrandTasks(widget.aBid),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
-            List<TaskModel> allTasks = snapshot.data; //all tasks of this Brand
+            List<dynamic> allTasks = snapshot.data; //all tasks of this Brand
             if (allTasks.isNotEmpty) {
               _tasks = _groupTasks(allTasks);
             }

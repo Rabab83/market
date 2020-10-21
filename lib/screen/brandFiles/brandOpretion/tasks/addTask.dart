@@ -137,7 +137,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         TaskModel taskModel = TaskModel(
                           description: _descriptionController.text.trim(),
                           name: _nameController.text.trim(),
-                          aBid: widget.taskModel.aBid,
+                          taskDate: _taskDate,
+                          aBid: widget.aBid,
                         );
                         await NewTaskDB().addNewTask(taskModel);
                         Navigator.pop(context);
@@ -147,7 +148,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     }
                   }
                 },
-              )
+              ),
+
               // processing
               //     ? Center(child: CircularProgressIndicator())
               //     : Padding(

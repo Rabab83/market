@@ -29,37 +29,35 @@ class NewBrand {
 
 //*************************************************************************//
 //*************************************************************************//
-       //Task Class
-class TaskModel  {
+//Task Class
+class TaskModel {
   final String aBid;
   final String name;
   final String description;
   final DateTime taskDate;
 
-  TaskModel ({
+  TaskModel({
     this.aBid,
     this.name,
     this.description,
     this.taskDate,
-  }) ;
+  });
 
-TaskModel.fromTask(Map<String, dynamic> data, String aBid)
-       : name = data["name"],
-         description = data['description'],
-         taskDate = data['taskDate'],
-         aBid = aBid;
+  TaskModel.fromTask(Map<String, dynamic> data, String aBid)
+      : name = data["name"],
+        description = data['description'],
+        taskDate = data['task_date'],
+        aBid = aBid;
   // Update & Send Data to  firebase
   Map<String, dynamic> toTask() {
     return {
       "name": name,
       "description": description,
-      "task_date":taskDate,
-      "aBid":aBid,
+      "task_date": taskDate,
+      "aBid": aBid,
     };
   }
-
 }
-
 
 //   factory TaskModel .fromMap(Map data) {
 //     return TaskModel (
@@ -89,7 +87,7 @@ TaskModel.fromTask(Map<String, dynamic> data, String aBid)
 
 //***************************************************************************//
 //***************************************************************************//
-               //AccountBreif Class
+//AccountBreif Class
 
 class AccountBreif {
   final String name;
@@ -597,7 +595,7 @@ class AccountBreif {
       "competitorsisalsodoing77": '',
       "competitorscuttrntlydoing78": '',
       "desiredmarketingchannel79": '',
-      "channeltoutilize80":'',
+      "channeltoutilize80": '',
       "channelcurrentlyusing81": '',
       "channeladdtostrategy82": '',
       "channelputtingonpause83": '',
@@ -608,7 +606,7 @@ class AccountBreif {
       "analyzecompetitorseoeffort88": '',
       "discovertheirsuccessfulkeywords89": '',
       "getanideaofconsumorbehavior90": '',
-      "getmarketingideasfromtheirrecentidea91":'' ,
+      "getmarketingideasfromtheirrecentidea91": '',
       "trackonlinementions92": '',
       "determinewhichplatfroms93": '',
       "seeiftheiraudiencehasincreased94": '',
