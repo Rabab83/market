@@ -18,72 +18,54 @@ class NewBrand {
       "email": email,
     };
   }
-
-  // Map<String, dynamic> updtoMap() {
-  //   return {
-  //     "name": name,
-  //     "email": email,
-  //   };
-  // }
 }
 
 //*************************************************************************//
 //*************************************************************************//
-//Task Class
-class TaskModel {
-  final String aBid;
+           //Task Class
+class TaskModel  {
+  // final String aBid;
   final String name;
   final String description;
   final DateTime taskDate;
+  final String id;
 
   TaskModel({
-    this.aBid,
+    // this.aBid,
     this.name,
     this.description,
     this.taskDate,
-  });
+    this.id,
+  }) ;
 
-  TaskModel.fromTask(Map<String, dynamic> data, String aBid)
-      : name = data["name"],
-        description = data['description'],
-        taskDate = data['task_date'],
-        aBid = aBid;
-  // Update & Send Data to  firebase
+
+
+  factory TaskModel.fromTask( Map<String, dynamic> data,String id) {
+    return TaskModel(
+      name: data['name'],
+      description: data['description'],
+      taskDate: data['task_date'].toDate(),
+      id: id,
+    );
+  }
+  //         //convert snapshot into TaskModel
+  factory TaskModel.fromDS(String id, Map<String, dynamic> data) {
+    return TaskModel(
+      id: id,
+      name: data['name'],
+      description: data['description'],
+      taskDate: data['task_date'].toDate(),
+    );
+  }
+
   Map<String, dynamic> toTask() {
     return {
       "name": name,
       "description": description,
       "task_date": taskDate,
-      "aBid": aBid,
     };
   }
 }
-
-//   factory TaskModel .fromMap(Map data) {
-//     return TaskModel (
-//       name: data['name'],
-//       description: data['description'],
-//       taskDate: data['task_date'],
-//     );
-//   }
-
-//   factory TaskModel .fromDS(String aBid, Map<String, dynamic> data) {
-//     return TaskModel (
-//       aBid: aBid,
-//       name: data['name'],
-//       description: data['description'],
-//       taskDate: data['task_date'].toDate(),
-//     );
-//   }
-
-//   Map<String, dynamic> toMap() {
-//     return {
-//       "name": name,
-//       "description": description,
-//       "task_date": taskDate,
-//     };
-//   }
-// }
 
 //***************************************************************************//
 //***************************************************************************//

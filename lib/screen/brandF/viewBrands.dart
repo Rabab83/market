@@ -56,7 +56,8 @@ class ViewBrands extends StatelessWidget {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => BrandFile(newBrand.id),
+                          builder: (_) =>
+                              BrandFile(aBid: newBrand.id, name: newBrand.name),
                         ),
                       ),
                     ),

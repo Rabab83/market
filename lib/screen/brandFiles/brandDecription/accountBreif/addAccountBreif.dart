@@ -3,7 +3,7 @@ import 'package:marketApp/model/classes.dart';
 import 'package:marketApp/services/crudFunctions.dart';
 
 // Form to add Account Breif to new Brands
-//viewAccountBreif navigate to this form
+//viewBrandDescription navigate to this form
 
 class AddAccountBreifPage extends StatefulWidget {
   final AccountBreif accountBreif;

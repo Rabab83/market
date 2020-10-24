@@ -5,9 +5,9 @@ import 'package:marketApp/services/crudFunctions.dart';
 
 class AddTaskPage extends StatefulWidget {
   final TaskModel taskModel;
-  final String aBid;
+  // final String aBid;
 
-  const AddTaskPage({Key key, this.taskModel, this.aBid}) : super(key: key);
+  const AddTaskPage({Key key, this.taskModel, }) : super(key: key);
 
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
@@ -15,11 +15,13 @@ class AddTaskPage extends StatefulWidget {
 
 TextEditingController _nameController;
 TextEditingController _descriptionController;
+DateTime _taskDate;
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  DateTime _taskDate;
-  GlobalKey<FormState> _key = GlobalKey<FormState>();
-  // bool processing;
+  // GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  final _key = GlobalKey<ScaffoldState>();
+  bool processing;
 
   bool _initialized = false;
   bool _error = false;
@@ -49,7 +51,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     _descriptionController = TextEditingController(
         text: isEditMode ? widget.taskModel.description : '');
     _taskDate = DateTime.now();
-    // processing = false;
+    processing = false;
   }
 
   get isEditMode => widget.taskModel != null;
@@ -59,8 +61,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
       appBar: AppBar(
         title: Text(isEditMode ? 'Edit Task' : 'Add New Task'),
       ),
+      key: _key,
       body: Form(
-        key: _key,
+        key: _formKey,
         child: Container(
           alignment: Alignment.center,
           child: ListView(
@@ -118,82 +121,80 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 },
               ),
               SizedBox(height: 10.0),
-              RaisedButton(
-                color: Theme.of(context).primaryColor,
-                textColor: Colors.white,
-                child: Text(isEditMode ? "Update" : "Save"),
-                //Adding Data to firebase
-                onPressed: () async {
-                  if (_key.currentState.validate()) {
-                    try {
-                      if (isEditMode) {
-                        TaskModel taskModel = TaskModel(
-                          description: _descriptionController.text.trim(),
-                          name: _nameController.text.trim(),
-                          aBid: widget.taskModel.aBid,
+              // RaisedButton(
+              //   color: Theme.of(context).primaryColor,
+              //   textColor: Colors.white,
+              //   child: Text(isEditMode ? "Update" : "Save"),
+              //   //Adding Data to firebase
+              //   onPressed: () async {
+              //     if (_formKey.currentState.validate()) {
+              //       try {
+              //         if (isEditMode) {
+              //           TaskModel taskModel = TaskModel(
+              //             description: _descriptionController.text.trim(),
+              //             name: _nameController.text.trim(),
+              //             id: widget.taskModel.id,
+              //           );
+              //           await NewTaskDB().updateTask(taskModel);
+              //         } else {
+              //           TaskModel taskModel = TaskModel(
+              //             description: _descriptionController.text.trim(),
+              //             name: _nameController.text.trim(),
+              //             taskDate: _taskDate,
+                         
+              //           );
+              //           await NewTaskDB().addNewTask(taskModel);
+              //           Navigator.pop(context);
+              //         }
+              //       } catch (e) {
+              //         print(e);
+              //       }
+              //     }
+              //   },
+              // ),
+
+              processing
+                  ? Center(child: CircularProgressIndicator())
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Material(
+                        elevation: 5.0,
+                        borderRadius: BorderRadius.circular(30.0),
+                        color: Theme.of(context).primaryColor,
+                        child: MaterialButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              setState(() {
+                                processing = true;
+                              });
+                              if (widget.taskModel != null) {
+                                 TaskModel taskModel = TaskModel(
+                                name: _nameController.text.trim(),
+                                description: _descriptionController.text.trim(),
+                                id: widget.taskModel.id,
                         );
                         await NewTaskDB().updateTask(taskModel);
-                      } else {
-                        TaskModel taskModel = TaskModel(
-                          description: _descriptionController.text.trim(),
-                          name: _nameController.text.trim(),
-                          taskDate: _taskDate,
-                          aBid: widget.aBid,
-                        );
-                        await NewTaskDB().addNewTask(taskModel);
-                        Navigator.pop(context);
-                      }
-                    } catch (e) {
-                      print(e);
-                    }
-                  }
-                },
-              ),
-
-              // processing
-              //     ? Center(child: CircularProgressIndicator())
-              //     : Padding(
-              //         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              //         child: Material(
-              //           elevation: 5.0,
-              //           borderRadius: BorderRadius.circular(30.0),
-              //           color: Theme.of(context).primaryColor,
-              //           child: MaterialButton(
-              //             onPressed: () async {
-              //               if (_formKey.currentState.validate()) {
-              //                 setState(() {
-              //                   processing = true;
-              //                 });
-              //                 if (widget.taskModel != null) {
-              //                   await newTaskDB. (widget.taskModel.aBid, {
-              //                     "name": _name.text.trim(),
-              //                     "description": _description.text.trim(),
-              //                     "task_date": widget.taskModel.taskDate,
-              //                   });
-              //                 } else {
-              //                   await newTaskDB.createItem(
-              //                     TaskModel (
-              //                       name: _name.text.trim(),
-              //                       description: _description.text.trim(),
-              //                       taskDate: _taskDate,
-              //                     ),
-              //                   );
-              //                 }
-              //                 Navigator.pop(context);
-              //                 setState(() {
-              //                   processing = false;
-              //                 });
-              //               }
-              //             },
-              //             child: Text(
-              //               "Save",
-              //               style: style.copyWith(
-              //                   color: Colors.white,
-              //                   fontWeight: FontWeight.bold),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
+                              } else {
+                                await NewTaskDB().addNewTask(
+                                  TaskModel (
+                                    name: _nameController.text.trim(),
+                                    description: _descriptionController.text.trim(),
+                                    taskDate: _taskDate,
+                                  ),
+                                );
+                              }
+                              Navigator.pop(context);
+                              setState(() {
+                                processing = false;
+                              });
+                            }
+                          },
+                          child: Text(
+                            isEditMode ? "Update" : "Save"                           
+                          ),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),

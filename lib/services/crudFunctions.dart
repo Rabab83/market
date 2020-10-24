@@ -20,12 +20,6 @@ class NewBrandDB {
         .toList();
   }
 
-  // Future<dynamic> getOneBrandName(NewBrand newBrand) async {
-  //   DocumentSnapshot snap =
-  //       await _db.collection('users').doc(newBrand.id).get();
-  //   return snap.data();
-  // }
-
   Future<void> addBrandName(NewBrand newBrand) {
     return _db.collection('users').doc(newBrand.email).set(newBrand.toMap());
   }
@@ -42,9 +36,10 @@ class NewBrandDB {
 //************************************************************************//
 //************************************************************************//
 //       // Calender Events CRUD Functions
-// DatabaseService<TaskModel > taskDBS = DatabaseService<TaskModel >("tasks",
-//     fromDS: (id, data) => TaskModel .fromTask(id, data),
-//     toMap: (task) => task.toTask());
+DatabaseService<TaskModel> newTaskDB = DatabaseService<TaskModel>("tasks",
+    fromDS: (id, data) => TaskModel.fromDS(id, data),
+    toMap: (task) => task.toTask());
+
 //************************************************************************//
 //************************************************************************//
 class NewTaskDB {
@@ -57,31 +52,23 @@ class NewTaskDB {
   }
 
   Future<List<TaskModel>> getAllTasks() async {
-    var snap = await _db.collection('tasks').get();
+     var snap = await _db.collection('tasks').get();
     return snap.docs
         .map((doc) => new TaskModel.fromTask(doc.data(), doc.id))
         .toList();
   }
+        
+  Future<List<TaskModel>> getBrandTasks(String name) async {
+    var snap =
+        await _db.collection('tasks').where('name', isEqualTo: name).get();
 
-  Future<List<TaskModel>> getBrandTasks(String aBid) async {
-    var allTasks = getAllTasks();
-    var brandTasks = await allTasks.then(
-        (value) => value.where((element) => element.aBid == aBid).toList());
-
-    // .then((value) => value.where((element) => element.aBid == aBid));
-    //     await _db.collection('events').doc(eventModel.aBid).get();
-    // return snap.data();
-    return brandTasks;
+    return snap.docs
+        .map((doc) => new TaskModel.fromTask(doc.data(),doc.id))
+        .toList();
   }
 
-  // Future<void> addNewTask(TaskModel taskModel) {
-  //   return _db.collection('tasks')
-  //          .doc(taskModel.aBid) 
-  //          .set(taskModel.toTask());
-  // }
-   Future<void> addNewTask(TaskModel taskModel) {
-    return _db.collection('tasks')           
-           .add(taskModel.toTask());
+  Future<void> addNewTask(TaskModel taskModel) {
+    return _db.collection('tasks').add(taskModel.toTask());
   }
 
   Future<void> deleteTask(String id) {
@@ -89,16 +76,13 @@ class NewTaskDB {
   }
 
   Future<void> updateTask(TaskModel taskModel) {
-    return _db
-        .collection('tasks')
-        .doc(taskModel.aBid)
-        .set(taskModel.toTask());
+    return _db.collection('tasks').doc(taskModel.id).set(taskModel.toTask());
   }
 }
 
 //************************************************************************//
 //************************************************************************//
-       //Account Breif CRUD Functions
+    //Account Breif CRUD Functions
 
 class NewAccountBreifDB {
   NewAccountBreifDB._internal();
