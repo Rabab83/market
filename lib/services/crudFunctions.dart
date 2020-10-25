@@ -51,21 +51,21 @@ class NewTaskDB {
     return _newTaskDB;
   }
 
-  Future<List<TaskModel>> getAllTasks() async {
-     var snap = await _db.collection('tasks').get();
-    return snap.docs
-        .map((doc) => new TaskModel.fromTask(doc.data(), doc.id))
-        .toList();
-  }
-        
-  Future<List<TaskModel>> getBrandTasks(String name) async {
-    var snap =
-        await _db.collection('tasks').where('name', isEqualTo: name).get();
+  // Future<List<TaskModel>> getAllTasks() async {
+  //   var snap = await _db.collection('tasks').get();
+  //   return snap.docs
+  //       .map((doc) => new TaskModel.fromTask(doc.data(), doc.id))
+  //       .toList();
+  // }
 
-    return snap.docs
-        .map((doc) => new TaskModel.fromTask(doc.data(),doc.id))
-        .toList();
-  }
+  // Future<List<TaskModel>> getBrandTasks(String name) async {
+  //   var snap =
+  //       await _db.collection('tasks').where('name', isEqualTo: name).get();
+
+  //   return snap.docs
+  //       .map((doc) => new TaskModel.fromTask(doc.data(), doc.id))
+  //       .toList();
+  // }
 
   Future<void> addNewTask(TaskModel taskModel) {
     return _db.collection('tasks').add(taskModel.toTask());
@@ -82,7 +82,7 @@ class NewTaskDB {
 
 //************************************************************************//
 //************************************************************************//
-    //Account Breif CRUD Functions
+//Account Breif CRUD Functions
 
 class NewAccountBreifDB {
   NewAccountBreifDB._internal();

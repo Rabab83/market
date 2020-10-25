@@ -24,14 +24,14 @@ class NewBrand {
 //*************************************************************************//
            //Task Class
 class TaskModel  {
-  // final String aBid;
+  final String aBid;
   final String name;
   final String description;
   final DateTime taskDate;
   final String id;
 
   TaskModel({
-    // this.aBid,
+    this.aBid,
     this.name,
     this.description,
     this.taskDate,
@@ -42,6 +42,7 @@ class TaskModel  {
 
   factory TaskModel.fromTask( Map<String, dynamic> data,String id) {
     return TaskModel(
+      aBid: data['aBid'],
       name: data['name'],
       description: data['description'],
       taskDate: data['task_date'].toDate(),
@@ -52,6 +53,7 @@ class TaskModel  {
   factory TaskModel.fromDS(String id, Map<String, dynamic> data) {
     return TaskModel(
       id: id,
+      aBid: data['aBid'],
       name: data['name'],
       description: data['description'],
       taskDate: data['task_date'].toDate(),
@@ -60,6 +62,7 @@ class TaskModel  {
 
   Map<String, dynamic> toTask() {
     return {
+      "aBid":aBid,
       "name": name,
       "description": description,
       "task_date": taskDate,

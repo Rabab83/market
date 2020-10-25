@@ -20,14 +20,15 @@ class MyApp extends StatelessWidget {
            ThemeData(primaryColor: Colors.pinkAccent[700],
                       accentColor: Colors.pink[200],),
         home: 
-            DashBoardPage(),
-           // LandingPage(
-          //  auth: Auth(),
+            // DashBoardPage(),
+           LandingPage(
+           auth: Auth(),
       //  routes: {
       //        "add_task": (_) => AddTaskPage(),
              
       //        },
        
+        ),
         );
   }
 }

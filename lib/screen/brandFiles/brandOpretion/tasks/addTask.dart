@@ -5,9 +5,9 @@ import 'package:marketApp/services/crudFunctions.dart';
 
 class AddTaskPage extends StatefulWidget {
   final TaskModel taskModel;
-  // final String aBid;
+  final String aBid;
 
-  const AddTaskPage({Key key, this.taskModel, }) : super(key: key);
+  const AddTaskPage({Key key, this.taskModel,this.aBid }) : super(key: key);
 
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
@@ -180,6 +180,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     name: _nameController.text.trim(),
                                     description: _descriptionController.text.trim(),
                                     taskDate: _taskDate,
+                                    aBid:widget.aBid,
                                   ),
                                 );
                               }

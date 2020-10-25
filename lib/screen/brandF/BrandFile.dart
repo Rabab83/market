@@ -79,6 +79,7 @@ class _BrandFileState extends State<BrandFile> {
                       MaterialPageRoute(
                         builder: (_) => ViewBrandCalender(
                           name: widget.name,
+                          aBid: widget.aBid,
                         ),
                       ),
                     );

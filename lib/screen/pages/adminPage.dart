@@ -85,20 +85,20 @@ class _AdminPageState extends State<AdminPage> {
       //   child: Container(
       //     child: Text('Admin Page'),
       //   ),
-      // ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AddTaskPage(
+      // // ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (_) => AddTaskPage(
                 
-              ),
-            ),
-          );
-        },
-      ),
+      //         ),
+      //       ),
+      //     );
+      //   },
+      // ),
    );
   }
 }

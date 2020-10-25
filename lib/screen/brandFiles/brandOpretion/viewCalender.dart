@@ -10,8 +10,9 @@ import 'package:marketApp/services/crudFunctions.dart';
 //Widget that is used to view each Brand Tasks
 //Navigation from "BrandFile" widget in brandF folder
 class ViewBrandCalender extends StatefulWidget {
+  final String aBid;
   final String name;
-  ViewBrandCalender({this.name});
+  ViewBrandCalender({this.name,this.aBid});
 
   @override
   _ViewBrandCalenderState createState() => _ViewBrandCalenderState();
@@ -68,9 +69,11 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
       ),
       body: StreamBuilder<List<TaskModel>>(
         // stream: newTaskDB.streamList(),
-        stream: newTaskDB.streamList()
-        .takeWhile((element) => element.where((e) => e.name==widget.name)), 
-        builder: (BuildContext context, AsyncSnapshot<List<TaskModel>>snapshot) {
+         //Solving problem of filtering tasks*********
+        stream: newTaskDB.streamList().map((event) =>
+            event.where((element) => element.aBid == widget.aBid).toList()),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
           if (snapshot.hasError) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
@@ -146,6 +149,20 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
                       },
                     )),
               ],
+            ),
+          );
+        },
+      ),
+      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AddTaskPage(
+                aBid:widget.aBid
+              ),
             ),
           );
         },
