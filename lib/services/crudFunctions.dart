@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:marketApp/model/classes.dart';
 import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:marketApp/services/auth.dart';
 
 // firebase CRUD Functions
 class NewBrandDB {
@@ -14,28 +15,28 @@ class NewBrandDB {
   }
 
   Future<List<NewBrand>> getBrandsNames() async {
-    var snap = await _db.collection('users').get();
+    var snap = await _db.collection('brands').get();
     return snap.docs
         .map((doc) => new NewBrand.fromMap(doc.data(), doc.id))
         .toList();
   }
 
   Future<void> addBrandName(NewBrand newBrand) {
-    return _db.collection('users').doc(newBrand.email).set(newBrand.toMap());
+    return _db.collection('brands').doc(newBrand.email).set(newBrand.toMap());
   }
 
   Future<void> deleteBrandName(String id) {
-    return _db.collection('users').doc(id).delete();
+    return _db.collection('brands').doc(id).delete();
   }
 
   Future<void> updateBrandName(NewBrand newBrand) {
-    return _db.collection('users').doc(newBrand.id).update(newBrand.toMap());
+    return _db.collection('brands').doc(newBrand.id).update(newBrand.toMap());
   }
 }
 
 //************************************************************************//
 //************************************************************************//
-//       // Calender Events CRUD Functions
+// Calender Events CRUD Functions
 DatabaseService<TaskModel> newTaskDB = DatabaseService<TaskModel>("tasks",
     fromDS: (id, data) => TaskModel.fromDS(id, data),
     toMap: (task) => task.toTask());
@@ -77,6 +78,35 @@ class NewTaskDB {
 
   Future<void> updateTask(TaskModel taskModel) {
     return _db.collection('tasks').doc(taskModel.id).set(taskModel.toTask());
+  }
+}
+
+//************************************************************************//
+//************************************************************************//
+//Users CRUD Functions
+class UsersDB {
+  static final UsersDB _userDB = UsersDB._internal();
+  FirebaseFirestore _db = FirebaseFirestore.instance;
+  UsersDB._internal();
+
+  factory UsersDB() {
+    return _userDB;
+  }
+  Future<List<User>> getAllEmployess() async {
+    var snap = await _db
+        .collection('users')
+        .where('isEmployee', isEqualTo: true)
+        .get();
+    return snap.docs
+        .map((doc) => new User.fromMap(doc.data(), doc.id))
+        .toList();
+   
+    // .then((QuerySnapshot querySnapshot) => {
+    //       querySnapshot.docs.forEach((doc) {
+
+    //         return doc['email'];
+    //       })
+    //     });
   }
 }
 

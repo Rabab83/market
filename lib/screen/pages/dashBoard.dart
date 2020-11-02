@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:marketApp/screen/pages/adminPage.dart';
 
-
 class DashBoardPage extends StatelessWidget {
   FirebaseAuth fAuth = FirebaseAuth.instance;
   FirebaseFirestore fStore = FirebaseFirestore.instance;
@@ -35,11 +34,12 @@ class DashBoardPage extends StatelessWidget {
               onTap: () {
                 // final userId = fAuth.currentUser.uid;
                 // fStore.collection('users').doc(userId).get().then((snapshot) =>
-                //     snapshot.data()['role'] == "admin"?
-                         Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminPage()),);
-                        // : Text("you are not allowed to enter this page"));
+                //     snapshot.data()['isAdmin'] == "true"?
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminPage()),
+                );
+                // : Text("you are not allowed to enter this page"));
               },
             ),
             ListTile(
@@ -53,7 +53,7 @@ class DashBoardPage extends StatelessWidget {
                 //             MaterialPageRoute(
                 //                 builder: (context) => Employee()))
                 //         : Text("you are not allowed to enter this page"));
-                      },
+              },
             ),
             ListTile(
               title: Text('Client'),

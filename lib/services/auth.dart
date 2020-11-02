@@ -3,35 +3,37 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class User {
-  User({@required this.uid});
+  User({@required this.uid, this.email});
   final String uid;
+  final String email;
+  User.fromMap(Map<String, dynamic> data, String id)
+      : uid = id,
+        email = data['email'];
 }
- 
- // AuthBase class 
+
+// AuthBase class
 abstract class AuthBase {
   Stream<User> get onAuthStateChanged; //onAuthStateChanged prototype
   Future<User> signInWithEmailAndPassword(
     String email,
     String password,
-       );                            //signInWithEmailAndPassword prototype
+  ); //signInWithEmailAndPassword prototype
   Future<User> createUserWithEmailAndPassword(
     String email,
     String password,
-    
-    );                            //createUserWithEmailAndPassword prototype
-  Future<void> signOut();         //signOut prototype
+  ); //createUserWithEmailAndPassword prototype
+  Future<void> signOut(); //signOut prototype
 }
 
- // Auth Class
+// Auth Class
 class Auth implements AuthBase {
-
   final _firebaseAuth = FirebaseAuth.instance;
-     //function to return user id
-    User _userFromFirebase(user) {
-      if (user == null) { 
-       return null;
-      }
-       return User(uid: user.uid);
+  //function to return user id
+  User _userFromFirebase(user) {
+    if (user == null) {
+      return null;
+    }
+    return User(uid: user.uid);
   }
 
   @override
@@ -39,10 +41,8 @@ class Auth implements AuthBase {
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
-  
   @override
-  Future<User> signInWithEmailAndPassword(
-    String email, String password) async {
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
     final authResult = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     return _userFromFirebase(authResult.user);
@@ -50,19 +50,20 @@ class Auth implements AuthBase {
 
   @override
   Future<User> createUserWithEmailAndPassword(
-      String email, String password, ) async {
-      final authResult = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password);
+    String email,
+    String password,
+  ) async {
+    final authResult = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
 
     await FirebaseFirestore.instance
         .collection('users')
         .doc(authResult.user.email)
         .set({
-       'email': email,
+      'email': email,
       'password': password,
     }); //only after siging up
-        return _userFromFirebase(authResult.user);
+    return _userFromFirebase(authResult.user);
   }
 
   @override

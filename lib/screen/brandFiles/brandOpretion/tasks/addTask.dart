@@ -1,13 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:marketApp/model/classes.dart';
+import 'package:marketApp/screen/brandFiles/brandOpretion/viewEmployeeList.dart';
+import 'package:marketApp/services/auth.dart';
 import 'package:marketApp/services/crudFunctions.dart';
 
 class AddTaskPage extends StatefulWidget {
   final TaskModel taskModel;
   final String aBid;
 
-  const AddTaskPage({Key key, this.taskModel,this.aBid }) : super(key: key);
+  const AddTaskPage({
+    Key key,
+    this.taskModel,
+    this.aBid,
+  }) : super(key: key);
 
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
@@ -55,6 +62,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   get isEditMode => widget.taskModel != null;
+  var _db = FirebaseFirestore.instance
+      .collection('users')
+      .where('isEmployee', isEqualTo: true)
+      .get();
+      
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +75,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
         title: Text(isEditMode ? 'Edit Task' : 'Add New Task'),
       ),
       key: _key,
+      // body: CustomScrollView(
+      //   slivers: <Widget>[
+      //     SliverList(
+      //       delegate: SliverChildListDelegate(
+      //         [
+      //           Container(
       body: Form(
         key: _formKey,
         child: Container(
@@ -121,38 +140,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 },
               ),
               SizedBox(height: 10.0),
-              // RaisedButton(
-              //   color: Theme.of(context).primaryColor,
-              //   textColor: Colors.white,
-              //   child: Text(isEditMode ? "Update" : "Save"),
-              //   //Adding Data to firebase
-              //   onPressed: () async {
-              //     if (_formKey.currentState.validate()) {
-              //       try {
-              //         if (isEditMode) {
-              //           TaskModel taskModel = TaskModel(
-              //             description: _descriptionController.text.trim(),
-              //             name: _nameController.text.trim(),
-              //             id: widget.taskModel.id,
-              //           );
-              //           await NewTaskDB().updateTask(taskModel);
-              //         } else {
-              //           TaskModel taskModel = TaskModel(
-              //             description: _descriptionController.text.trim(),
-              //             name: _nameController.text.trim(),
-              //             taskDate: _taskDate,
-                         
-              //           );
-              //           await NewTaskDB().addNewTask(taskModel);
-              //           Navigator.pop(context);
-              //         }
-              //       } catch (e) {
-              //         print(e);
-              //       }
-              //     }
+              // FlatButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (_) => ViewEmployeeList(),
+              //       ),
+              //     );
               //   },
+              //   child: Text('Choose From Employee List'),
               // ),
-
+              SizedBox(height: 10.0),
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
@@ -168,21 +167,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 processing = true;
                               });
                               if (widget.taskModel != null) {
-                                 TaskModel taskModel = TaskModel(
-                                name: _nameController.text.trim(),
-                                description: _descriptionController.text.trim(),
-                                id: widget.taskModel.id,
-                        );
-                        await NewTaskDB().updateTask(taskModel);
+                                TaskModel taskModel = TaskModel(
+                                  name: _nameController.text.trim(),
+                                  description:
+                                      _descriptionController.text.trim(),
+                                  id: widget.taskModel.id,
+                                );
+                                await NewTaskDB().updateTask(taskModel);
                               } else {
                                 await NewTaskDB().addNewTask(
-                                  TaskModel (
+                                  TaskModel(
                                     name: _nameController.text.trim(),
-                                    description: _descriptionController.text.trim(),
+                                    description:
+                                        _descriptionController.text.trim(),
                                     taskDate: _taskDate,
-                                    aBid:widget.aBid,
+                                    aBid: widget.aBid,
                                   ),
                                 );
+                                Navigator.pop(context);
                               }
                               Navigator.pop(context);
                               setState(() {
@@ -190,9 +192,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               });
                             }
                           },
-                          child: Text(
-                            isEditMode ? "Update" : "Save"                           
-                          ),
+                          child: Text(isEditMode ? "Update" : "Save"),
                         ),
                       ),
                     ),
@@ -200,6 +200,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
           ),
         ),
       ),
+      //           ),
+      //           ViewEmployeeList(),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 

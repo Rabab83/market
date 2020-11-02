@@ -31,7 +31,7 @@ class ViewBrands extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: ListTile(
-                      title: Text(newBrand.name),
+                      title: Text(newBrand.name),  //Brand Name
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
@@ -57,7 +57,8 @@ class ViewBrands extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
-                              BrandFile(aBid: newBrand.id, name: newBrand.name),
+                              BrandFile(aBid: newBrand.id,
+                               name: newBrand.name),
                         ),
                       ),
                     ),
@@ -90,22 +91,23 @@ class ViewBrands extends StatelessWidget {
 
   Future<bool> _showConfirmationDialog(BuildContext context) async {
     return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) => AlertDialog(
-              content: Text("Are you sure you want to delete?"),
-              actions: <Widget>[
-                FlatButton(
-                  textColor: Colors.red,
-                  child: Text("Delete"),
-                  onPressed: () => Navigator.pop(context, true),
-                ),
-                FlatButton(
-                  textColor: Colors.black,
-                  child: Text("No"),
-                  onPressed: () => Navigator.pop(context, false),
-                ),
-              ],
-            ));
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        content: Text("Are you sure you want to delete?"),
+        actions: <Widget>[
+          FlatButton(
+            textColor: Colors.red,
+            child: Text("Delete"),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+          FlatButton(
+            textColor: Colors.black,
+            child: Text("No"),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+        ],
+      ),
+    );
   }
 }
