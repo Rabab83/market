@@ -6,6 +6,10 @@ import 'package:marketApp/screen/brandFiles/brandOpretion/viewEmployeeList.dart'
 import 'package:marketApp/services/auth.dart';
 import 'package:marketApp/services/crudFunctions.dart';
 
+final employeesRef = FirebaseFirestore.instance
+    .collection('users')
+    .where('isEmployee', isEqualTo: true);
+
 class AddTaskPage extends StatefulWidget {
   final TaskModel taskModel;
   final String aBid;
@@ -29,7 +33,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
-
+  List<String> employeesEmails = [];
+  String employeeEmail = '';
   bool _initialized = false;
   bool _error = false;
 
@@ -59,14 +64,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
         text: isEditMode ? widget.taskModel.description : '');
     _taskDate = DateTime.now();
     processing = false;
+    getEmployees();
+  }
+
+  getEmployees() {
+    employeesRef.get().then((QuerySnapshot querySnapshot) => {
+          querySnapshot.docs.forEach((doc) {
+            print(doc["email"]);
+            employeesEmails.add(doc["email"]);
+          })
+        });
   }
 
   get isEditMode => widget.taskModel != null;
-  var _db = FirebaseFirestore.instance
-      .collection('users')
-      .where('isEmployee', isEqualTo: true)
-      .get();
-      
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +150,36 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 },
               ),
               SizedBox(height: 10.0),
+              new FormField(
+                builder: (FormFieldState state) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.person),
+                      labelText: 'Employees',
+                    ),
+                    isEmpty: employeeEmail == '',
+                    child: new DropdownButtonHideUnderline(
+                      child: new DropdownButton(
+                        value: employeeEmail,
+                        isDense: true,
+                        onChanged: (String newValue) {
+                          setState(() {
+                            
+                            employeeEmail = newValue;
+                            state.didChange(newValue);
+                          });
+                        },
+                        items: employeesEmails.map((String value) {
+                          return new DropdownMenuItem(
+                            value: value,
+                            child: new Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  );
+                },
+              ),
               // FlatButton(
               //   onPressed: () {
               //     Navigator.push(
@@ -151,7 +191,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               //   },
               //   child: Text('Choose From Employee List'),
               // ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(

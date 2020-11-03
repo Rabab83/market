@@ -98,7 +98,7 @@ class UsersDB {
         .where('isEmployee', isEqualTo: true)
         .get();
     return snap.docs
-        .map((doc) => new User.fromMap(doc.data(), doc.id))
+            .map((doc) => new User.fromMap(doc.data(), doc.id))
         .toList();
    
     // .then((QuerySnapshot querySnapshot) => {
