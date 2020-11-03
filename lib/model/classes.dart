@@ -29,6 +29,7 @@ class TaskModel {
   final String description;
   final DateTime taskDate;
   final String id;
+  final String assignedemployeeId;
   final String employeeId;
 
   TaskModel({
@@ -38,6 +39,8 @@ class TaskModel {
     this.taskDate,
     this.id,
     this.employeeId,
+    this.assignedemployeeId,
+    
   });
 
   factory TaskModel.fromTask(Map<String, dynamic> data, String id) {
@@ -47,6 +50,7 @@ class TaskModel {
       description: data['description'],
       taskDate: data['task_date'].toDate(),
       employeeId: data['employeeId'],
+      assignedemployeeId:data['assignedemployeeId'],
       id: id,
     );
   }
@@ -59,6 +63,7 @@ class TaskModel {
       description: data['description'],
       taskDate: data['task_date'].toDate(),
       employeeId: data['employeeId'],
+      assignedemployeeId:data['assignedemployeeId'],
     );
   }
 
@@ -69,6 +74,7 @@ class TaskModel {
       "description": description,
       "task_date": taskDate,
       "employeeId": employeeId,
+      'assignedemployeeId':assignedemployeeId,
     };
   }
 }

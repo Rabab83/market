@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:marketApp/model/classes.dart';
@@ -33,7 +34,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
-  List<String> employeesEmails =<String> ['', 'employee1', 'employee2', 'employee3', 'employee4'];
+  List<String> employeesEmails = <String>[
+    '',
+    'employee1',
+    'employee2',
+    'employee3',
+    'employee4'
+  ];
   String employeeEmail = '';
   bool _initialized = false;
   bool _error = false;
@@ -64,7 +71,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         text: isEditMode ? widget.taskModel.description : '');
     _taskDate = DateTime.now();
     processing = false;
-    // getEmployees(); 
+    // getEmployees();
   }
 
   // getEmployees() {
@@ -85,7 +92,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
         title: Text(isEditMode ? 'Edit Task' : 'Add New Task'),
       ),
       key: _key,
-      
       body: new SafeArea(
         top: false,
         bottom: false,
@@ -212,6 +218,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                   );
                                   await NewTaskDB().updateTask(taskModel);
                                 } else {
+                                final employeeId=  FirebaseAuth.instance.currentUser.email;
                                   await NewTaskDB().addNewTask(
                                     TaskModel(
                                       name: _nameController.text.trim(),
@@ -219,7 +226,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                           _descriptionController.text.trim(),
                                       taskDate: _taskDate,
                                       aBid: widget.aBid,
-                                      employeeId:employeeEmail ,
+                                      assignedemployeeId: employeeEmail,
+                                      employeeId:employeeId,
                                     ),
                                   );
                                   Navigator.pop(context);
