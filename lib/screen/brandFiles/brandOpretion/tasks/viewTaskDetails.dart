@@ -24,6 +24,7 @@ class TaskDetailsPage extends StatelessWidget {
             SizedBox(height: 20.0),
             Text(task.description),
             SizedBox(height: 20.0),
+            Text(task.employeeId),
           ],
         ),
       ),
