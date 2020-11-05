@@ -48,7 +48,7 @@ class _BrandFileState extends State<BrandFile> {
                       MaterialPageRoute(
                         builder: (_) => ViewBrandDescription(
                           aBid: widget.aBid,
-                          name: widget.name,
+                          // name: widget.name,
                         ),
                       ),
                     );

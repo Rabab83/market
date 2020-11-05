@@ -14,7 +14,8 @@ import 'package:marketApp/services/crudFunctions.dart';
 class ViewBrandDescription extends StatefulWidget {
   final AccountBreif accountBreif;
   final String aBid;
-  ViewBrandDescription({this.aBid, this.accountBreif});
+  // final String name;
+  ViewBrandDescription({this.aBid, this.accountBreif,});
 
   @override
   _ViewBrandDescriptionState createState() => _ViewBrandDescriptionState();
