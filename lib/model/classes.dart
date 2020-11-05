@@ -27,7 +27,7 @@ class TaskModel {
   final String aBid;
   final String name;
   final String description;
-  final DateTime taskDate;
+  final DateTime taskdate;
   final String id;
   final String assignedemployeeId;
   final String employeeId;
@@ -36,7 +36,7 @@ class TaskModel {
     this.aBid,
     this.name,
     this.description,
-    this.taskDate,
+    this.taskdate,
     this.id,
     this.employeeId,
     this.assignedemployeeId,
@@ -48,7 +48,7 @@ class TaskModel {
       aBid: data['aBid'],
       name: data['name'],
       description: data['description'],
-      taskDate: data['task_date'].toDate(),
+      taskdate: data['taskdate'].toDate(),
       employeeId: data['employeeId'],
       assignedemployeeId:data['assignedemployeeId'],
       id: id,
@@ -61,7 +61,7 @@ class TaskModel {
       aBid: data['aBid'],
       name: data['name'],
       description: data['description'],
-      taskDate: data['task_date'].toDate(),
+      taskdate: data['taskdate'].toDate(),
       employeeId: data['employeeId'],
       assignedemployeeId:data['assignedemployeeId'],
     );
@@ -72,7 +72,7 @@ class TaskModel {
       "aBid": aBid,
       "name": name,
       "description": description,
-      "task_date": taskDate,
+      "taskdate": taskdate,
       "employeeId": employeeId,
       'assignedemployeeId':assignedemployeeId,
     };

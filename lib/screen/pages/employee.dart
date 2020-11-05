@@ -1,21 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:marketApp/model/classes.dart';
+import 'package:marketApp/screen/brandFiles/brandOpretion/tasks/addTask.dart';
 import 'package:marketApp/screen/brandFiles/brandOpretion/tasks/viewTaskDetails.dart';
+import 'package:marketApp/screen/pages/adminPage.dart';
 import 'package:marketApp/services/crudFunctions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Calender extends StatefulWidget {
+class Employee extends StatefulWidget {
   @override
-  _CalenderState createState() => _CalenderState();
+  _EmployeeState createState() => _EmployeeState();
 }
 
-class _CalenderState extends State<Calender> {
+class _EmployeeState extends State<Employee> {
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _tasks;
   List<dynamic> _selectedTasks;
+  List<TaskModel> allTasks;
+  final userId = FirebaseAuth.instance.currentUser.email;
+
+  DateTime _taskDate;
+
   bool _initialized = false;
   bool _error = false;
+
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
     try {
@@ -32,7 +42,7 @@ class _CalenderState extends State<Calender> {
     }
   }
 
-  @override
+ @override
   void initState() {
     super.initState();
     _controller = CalendarController();
@@ -52,16 +62,24 @@ class _CalenderState extends State<Calender> {
     return data;
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<TaskModel>>(
-        stream: newTaskDB.streamList(),
-        builder: (context, snapshot) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Your Week Tasks '),
+      ),
+      body: StreamBuilder<List<TaskModel>>(
+        //Solving problem of filtering tasks*********
+        stream: newTaskDB.streamList().map((event) =>
+            event.where((element) => element.assignedemployeeId == userId).toList()),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data);
-            List<TaskModel> allTasks = snapshot.data;
-            if (allTasks.isNotEmpty) {
-              _tasks = _groupTasks(allTasks);
+            List<TaskModel> brandTasks = snapshot.data;
+            if (brandTasks.isNotEmpty) {
+              _tasks = _groupTasks(brandTasks);
+              print(brandTasks.length);
             }
           }
           return SingleChildScrollView(
@@ -70,7 +88,7 @@ class _CalenderState extends State<Calender> {
               children: <Widget>[
                 TableCalendar(
                   events: _tasks,
-                  initialCalendarFormat: CalendarFormat.month,
+                  initialCalendarFormat: CalendarFormat.week,
                   calendarStyle: CalendarStyle(
                     canEventMarkersOverflow: true,
                     todayColor: Colors.orange,
@@ -89,7 +107,7 @@ class _CalenderState extends State<Calender> {
                     formatButtonTextStyle: TextStyle(color: Colors.white),
                     formatButtonShowsNext: false,
                   ),
-                  startingDayOfWeek: StartingDayOfWeek.monday,
+                  startingDayOfWeek: StartingDayOfWeek.sunday,
                   onDaySelected: (date, events) {
                     setState(() {
                       _selectedTasks = events;
@@ -105,8 +123,7 @@ class _CalenderState extends State<Calender> {
                         child: Text(
                           date.day.toString(),
                           style: TextStyle(color: Colors.white),
-                        ),
-                        ),
+                        ),),
                     todayDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
@@ -116,7 +133,7 @@ class _CalenderState extends State<Calender> {
                         child: Text(
                           date.day.toString(),
                           style: TextStyle(color: Colors.white),
-                        )),
+                        ),),
                   ),
                   calendarController: _controller,
                 ),
@@ -124,18 +141,20 @@ class _CalenderState extends State<Calender> {
                       title: Text(task.name),
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => TaskDetailsPage(
-                              task: task,
-                            ),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => TaskDetailsPage(
+                                      task: task,
+                                    ),),);
                       },
                     )),
               ],
             ),
           );
-        });
+        },
+      ),
+      // ),
+      
+    );
   }
 }

@@ -12,7 +12,7 @@ import 'package:marketApp/services/crudFunctions.dart';
 class ViewBrandCalender extends StatefulWidget {
   final String aBid;
   final String name;
-  ViewBrandCalender({this.name,this.aBid});
+  ViewBrandCalender({this.name, this.aBid});
 
   @override
   _ViewBrandCalenderState createState() => _ViewBrandCalenderState();
@@ -54,7 +54,7 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
     Map<DateTime, List<dynamic>> data = {};
     tasks.forEach((task) {
       DateTime date = DateTime(
-          task.taskDate.year, task.taskDate.month, task.taskDate.day, 12);
+          task.taskdate.year, task.taskdate.month, task.taskdate.day, 12);
       if (data[date] == null) data[date] = [];
       data[date].add(task);
     });
@@ -65,18 +65,15 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Brand Tasks Calender'),
+        title: Text("${widget.name} Calender"),
       ),
       body: StreamBuilder<List<TaskModel>>(
-        
-         //Solving problem of filtering tasks*********
+        //Solving problem of filtering tasks*********
         stream: newTaskDB.streamList().map((event) =>
             event.where((element) => element.aBid == widget.aBid).toList()),
         builder:
             (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData) {
+          if (snapshot.hasData) {
             List<TaskModel> brandTasks = snapshot.data;
             if (brandTasks.isNotEmpty) {
               _tasks = _groupTasks(brandTasks);
@@ -91,13 +88,14 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
                   events: _tasks,
                   initialCalendarFormat: CalendarFormat.month,
                   calendarStyle: CalendarStyle(
-                      canEventMarkersOverflow: true,
-                      todayColor: Colors.orange,
-                      selectedColor: Theme.of(context).primaryColor,
-                      todayStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                          color: Colors.white)),
+                    canEventMarkersOverflow: true,
+                    todayColor: Colors.orange,
+                    selectedColor: Theme.of(context).primaryColor,
+                    todayStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Colors.white),
+                  ),
                   headerStyle: HeaderStyle(
                     centerHeaderTitle: true,
                     formatButtonDecoration: BoxDecoration(
@@ -123,7 +121,7 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
                         child: Text(
                           date.day.toString(),
                           style: TextStyle(color: Colors.white),
-                        )),
+                        ),),
                     todayDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
@@ -133,7 +131,7 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
                         child: Text(
                           date.day.toString(),
                           style: TextStyle(color: Colors.white),
-                        )),
+                        ),),
                   ),
                   calendarController: _controller,
                 ),
@@ -145,7 +143,7 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
                             MaterialPageRoute(
                                 builder: (_) => TaskDetailsPage(
                                       task: task,
-                                    )));
+                                    ),),);
                       },
                     )),
               ],
@@ -160,9 +158,7 @@ class _ViewBrandCalenderState extends State<ViewBrandCalender> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => AddTaskPage(
-                aBid:widget.aBid
-              ),
+              builder: (_) => AddTaskPage(aBid: widget.aBid),
             ),
           );
         },

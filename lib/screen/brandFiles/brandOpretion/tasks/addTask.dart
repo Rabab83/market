@@ -6,10 +6,12 @@ import 'package:marketApp/model/classes.dart';
 import 'package:marketApp/screen/brandFiles/brandOpretion/viewEmployeeList.dart';
 import 'package:marketApp/services/auth.dart';
 import 'package:marketApp/services/crudFunctions.dart';
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 
-final employeesRef = FirebaseFirestore.instance
-    .collection('users')
-    .where('isEmployee', isEqualTo: true);
+
+// final employeesRef = FirebaseFirestore.instance
+//     .collection('users')
+//     .where('isEmployee', isEqualTo: true);
 
 class AddTaskPage extends StatefulWidget {
   final TaskModel taskModel;
@@ -36,10 +38,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
   bool processing;
   List<String> employeesEmails = <String>[
     '',
-    'employee1',
-    'employee2',
-    'employee3',
-    'employee4'
+    'employee1@gmail.com',
+    'employee2@gmail.com',
+    'employee3@gmail.com',
+    'employee4@gmail.com'
   ];
   String employeeEmail = '';
   bool _initialized = false;
@@ -183,17 +185,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     );
                   },
                 ),
-                // FlatButton(
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (_) => ViewEmployeeList(),
-                //       ),
-                //     );
-                //   },
-                //   child: Text('Choose From Employee List'),
-                // ),
+                
                 SizedBox(height: 20.0),
                 processing
                     ? Center(child: CircularProgressIndicator())
@@ -215,19 +207,21 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     description:
                                         _descriptionController.text.trim(),
                                     id: widget.taskModel.id,
+                                    taskdate: widget.taskModel.taskdate,
                                   );
                                   await NewTaskDB().updateTask(taskModel);
                                 } else {
-                                final employeeId=  FirebaseAuth.instance.currentUser.email;
+                                  final employeeId =
+                                      FirebaseAuth.instance.currentUser.email;
                                   await NewTaskDB().addNewTask(
                                     TaskModel(
                                       name: _nameController.text.trim(),
                                       description:
                                           _descriptionController.text.trim(),
-                                      taskDate: _taskDate,
+                                      taskdate: _taskDate,
                                       aBid: widget.aBid,
                                       assignedemployeeId: employeeEmail,
-                                      employeeId:employeeId,
+                                      employeeId: employeeId,
                                     ),
                                   );
                                   Navigator.pop(context);

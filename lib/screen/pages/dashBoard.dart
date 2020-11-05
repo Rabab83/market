@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:marketApp/screen/pages/adminPage.dart';
+import 'package:marketApp/screen/pages/employee.dart';
 
 class DashBoardPage extends StatelessWidget {
   FirebaseAuth fAuth = FirebaseAuth.instance;
@@ -48,11 +49,11 @@ class DashBoardPage extends StatelessWidget {
               onTap: () {
                 // final userId = fAuth.currentUser.uid;
                 // fStore.collection('users').doc(userId).get().then((snapshot) =>
-                //     snapshot.data()['role'] == "employee"||snapshot.data()['role'] =="admin"
-                //         ? Navigator.push(context,
-                //             MaterialPageRoute(
-                //                 builder: (context) => Employee()))
-                //         : Text("you are not allowed to enter this page"));
+                //     snapshot.data()['role'] == "employee"||snapshot.data()['role'] =="admin"?
+                         Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (context) => Employee(),),);
+                //         : Text("you are not allowed to enter this page"),);
               },
             ),
             ListTile(
@@ -88,19 +89,21 @@ class DashBoardPage extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Column(children: <Widget>[
-          Image.network(
-              'https://www.intandemcommunications.co.uk/wp-content/uploads/2019/08/What-is-marketing-500x333.jpg',
-              fit: BoxFit.fitWidth,
-              width: 500),
-          Container(
-            margin: const EdgeInsets.all(15),
-            child: Text(
-              'The best place to Market your Business.',
-              style: TextStyle(fontSize: 22.0, color: Colors.pinkAccent),
+        child: Column(
+          children: <Widget>[
+            Image.network(
+                'https://www.intandemcommunications.co.uk/wp-content/uploads/2019/08/What-is-marketing-500x333.jpg',
+                fit: BoxFit.fitWidth,
+                width: 500),
+            Container(
+              margin: const EdgeInsets.all(15),
+              child: Text(
+                'The best place to Market your Business.',
+                style: TextStyle(fontSize: 22.0, color: Colors.pinkAccent),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }

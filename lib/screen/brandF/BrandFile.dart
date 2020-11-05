@@ -18,7 +18,7 @@ class _BrandFileState extends State<BrandFile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Brand File'),
+        title: Text("${widget.name} File"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,6 +48,7 @@ class _BrandFileState extends State<BrandFile> {
                       MaterialPageRoute(
                         builder: (_) => ViewBrandDescription(
                           aBid: widget.aBid,
+                          name: widget.name,
                         ),
                       ),
                     );
