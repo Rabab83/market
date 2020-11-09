@@ -3,12 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class User {
-  User({@required this.uid, this.email});
+  User({@required this.uid,this.userName ,this.email});
   final String uid;
   final String email;
+  final String userName;
   User.fromMap(Map<String, dynamic> data, String id)
       : uid = id,
-        email = data['email'];
+        email = data['email'],
+        userName = data['userName'];
 }
 
 // AuthBase class
@@ -21,6 +23,7 @@ abstract class AuthBase {
   Future<User> createUserWithEmailAndPassword(
     String email,
     String password,
+    String userName,
   ); //createUserWithEmailAndPassword prototype
   Future<void> signOut(); //signOut prototype
 }
@@ -52,6 +55,7 @@ class Auth implements AuthBase {
   Future<User> createUserWithEmailAndPassword(
     String email,
     String password,
+    String userName,
   ) async {
     final authResult = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
@@ -61,7 +65,8 @@ class Auth implements AuthBase {
         .doc(authResult.user.email)
         .set({
       'email': email,
-      'password': password,
+      // 'password': password,
+      'userName':userName,
     }); //only after siging up
     return _userFromFirebase(authResult.user);
   }

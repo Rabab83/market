@@ -8,10 +8,9 @@ import 'package:marketApp/services/auth.dart';
 import 'package:marketApp/services/crudFunctions.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 
-
-// final employeesRef = FirebaseFirestore.instance
-//     .collection('users')
-//     .where('isEmployee', isEqualTo: true);
+final employeesRef = FirebaseFirestore.instance
+    .collection('users')
+    .where('isEmployee ', isEqualTo: true);
 
 class AddTaskPage extends StatefulWidget {
   final TaskModel taskModel;
@@ -38,10 +37,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
   bool processing;
   List<String> employeesEmails = <String>[
     '',
-    'employee1@gmail.com',
-    'employee2@gmail.com',
-    'employee3@gmail.com',
-    'employee4@gmail.com'
+    'Ahmed',
+    'Mohammed',
+    'Mahmoud',
+    'Ali',
+    'Mamdouh',
   ];
   String employeeEmail = '';
   bool _initialized = false;
@@ -76,13 +76,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
     // getEmployees();
   }
 
-  // getEmployees() {
-  //   employeesRef.get().then((QuerySnapshot querySnapshot) => {
-  //         querySnapshot.docs.forEach((doc) {
+  // getEmployees() async{
+  //  final employeesEm = await employeesRef.get() ;
+
+  //         emplyeesEm.forEach((doc) {
   //           employeesEmails.add(doc["email"]);
   //           print(employeesEmails);
-  //         })
-  //       });
+  //}
   // }
 
   get isEditMode => widget.taskModel != null;
@@ -185,7 +185,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     );
                   },
                 ),
-                
                 SizedBox(height: 20.0),
                 processing
                     ? Center(child: CircularProgressIndicator())

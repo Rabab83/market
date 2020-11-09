@@ -41,6 +41,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         await widget.auth.createUserWithEmailAndPassword(
           _email,
           _password,
+          _userName,
         );
       }
 
@@ -76,20 +77,23 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   List<Widget> _buildChildren() {
     final primaryText = _formType == EmailSignInFormType.signIn
         ? 'Sign in'
-        : 'Create an account';
+        : 'Create an account'; //On Raised Button
     final secondaryText = _formType == EmailSignInFormType.signIn
         ? 'Need an account? Register'
-        : 'Have an account? Sign in';
+        : 'Have an account? Sign in'; //On FlatButton
 
-    bool submitEnabled = widget.emailValidator.isValid(_email) &&
+    bool submitEnabled = (_formType ==EmailSignInFormType.signIn) ? (widget.emailValidator.isValid(_email) &&
         widget.passwordValidator.isValid(_password) &&
-        !_isLoading;
+        !_isLoading):(widget.emailValidator.isValid(_email) &&
+        widget.passwordValidator.isValid(_password) &&widget.userNameValidator.isValid(_userName)
+         &&!_isLoading) ;
 
     return [
       _buildEmailTextField(),
       SizedBox(height: 8.0),
       _buildPasswordTextField(),
       SizedBox(height: 8.0),
+      _formType == EmailSignInFormType.register?_buildUserNameTextField():SizedBox(height: 8.0),
       FormSubmitButton(
         text: primaryText,
         onPressed: submitEnabled ? _submit : null,
@@ -136,6 +140,24 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       textInputAction: TextInputAction.next,
       onChanged: (email) => _updateState(),
       onEditingComplete: _emailEditingComplete,
+    );
+  }
+
+  TextField _buildUserNameTextField() {
+    bool showErrorText = _submitted && !widget.userNameValidator.isValid(_userName);
+    return TextField(
+      controller: _userNameController,
+      focusNode: _userNameFocusNode,
+      decoration: InputDecoration(
+        labelText: 'UserName',
+        hintText: 'test',
+        errorText: showErrorText ? widget.invalidUserNameErrorText : null,
+        enabled: _isLoading == false,
+      ),
+      autocorrect: false,
+      textInputAction: TextInputAction.next,
+      onChanged: (userName) => _updateState(),
+      onEditingComplete: _submit,
     );
   }
 
