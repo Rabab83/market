@@ -35,7 +35,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
-  List<String> employeesEmails = <String>[
+  List<String> employeesNames = <String>[
     '',
     'Ahmed',
     'Mohammed',
@@ -43,7 +43,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     'Ali',
     'Mamdouh',
   ];
-  String employeeEmail = '';
+  String employeeName = '';
   bool _initialized = false;
   bool _error = false;
 
@@ -76,13 +76,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
     // getEmployees();
   }
 
-  // getEmployees() async{
-  //  final employeesEm = await employeesRef.get() ;
-
-  //         emplyeesEm.forEach((doc) {
-  //           employeesEmails.add(doc["email"]);
-  //           print(employeesEmails);
-  //}
+  // getEmployees() {
+  //   setState(() {
+  //     employeesRef.get().then((QuerySnapshot querySnapshot) => {
+  //           querySnapshot.docs.forEach((doc) {
+  //             print(doc["userName"]);
+  //             employeesNames.add(doc["userName"]);
+  //           })
+  //         });
+  //   });
   // }
 
   get isEditMode => widget.taskModel != null;
@@ -163,18 +165,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         icon: const Icon(Icons.person),
                         labelText: 'Employees',
                       ),
-                      isEmpty: employeeEmail == '',
+                      isEmpty: employeeName == '',
                       child: new DropdownButtonHideUnderline(
                         child: new DropdownButton(
-                          value: employeeEmail,
+                          value: employeeName,
                           isDense: true,
                           onChanged: (String newValue) {
                             setState(() {
-                              employeeEmail = newValue;
+                              employeeName = newValue;
                               state.didChange(newValue);
                             });
                           },
-                          items: employeesEmails.map((String value) {
+                          items: employeesNames.map((String value) {
                             return new DropdownMenuItem(
                               value: value,
                               child: new Text(value),
@@ -207,11 +209,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                         _descriptionController.text.trim(),
                                     id: widget.taskModel.id,
                                     taskdate: widget.taskModel.taskdate,
+                                    assignedemployeeId: employeeName,
                                   );
                                   await NewTaskDB().updateTask(taskModel);
                                 } else {
-                                  final employeeId =
+                                  final userId =
                                       FirebaseAuth.instance.currentUser.email;
+                                  final empN = await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(userId)
+                                      .get();
+                                  final empName = empN.data()['userName'];
+                                  print(empName);
                                   await NewTaskDB().addNewTask(
                                     TaskModel(
                                       name: _nameController.text.trim(),
@@ -219,8 +228,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                           _descriptionController.text.trim(),
                                       taskdate: _taskDate,
                                       aBid: widget.aBid,
-                                      assignedemployeeId: employeeEmail,
-                                      employeeId: employeeId,
+                                      assignedemployeeId: employeeName,
+                                      employeeId: empName,
                                     ),
                                   );
                                   Navigator.pop(context);
