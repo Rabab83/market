@@ -11,6 +11,10 @@ class TaskDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Task details'),
+        actions: [
+          IconButton(icon: Icon(Icons.edit), onPressed: null),
+          IconButton(icon: Icon(Icons.delete), onPressed: null),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -27,8 +31,14 @@ class TaskDetailsPage extends StatelessWidget {
             Text('Task From:'),
             Text(task.employeeId),
             SizedBox(height: 20.0),
-            Text('To:'),
-            Text(task.assignedemployeeId)
+            Text('Assigned To:'),
+            Text(task.assignedemployeeId),
+            SizedBox(height: 20.0),
+            Text('Start on:'),
+            Text(task.taskdate.toString()),
+            SizedBox(height: 20.0),
+            Text('Ends on:'),
+            Text(task.endDate.toString()),
           ],
         ),
       ),

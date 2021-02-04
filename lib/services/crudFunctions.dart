@@ -4,10 +4,12 @@ import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:marketApp/services/auth.dart';
 
+  FirebaseFirestore _db = FirebaseFirestore.instance;
+
+
 // firebase CRUD Functions
 class NewBrandDB {
   static final NewBrandDB _newBrandDB = NewBrandDB._internal();
-  FirebaseFirestore _db = FirebaseFirestore.instance;
   NewBrandDB._internal();
 
   factory NewBrandDB() {
@@ -24,12 +26,14 @@ class NewBrandDB {
   Future<void> addBrandName(NewBrand newBrand) {
     return _db.collection('brands').doc(newBrand.email).set(newBrand.toMap());
   }
-
+       //Must delete the brand tasks also*********
   Future<void> deleteBrandName(String id) {
+    print(id);
     return _db.collection('brands').doc(id).delete();
   }
 
   Future<void> updateBrandName(NewBrand newBrand) {
+    print(newBrand.id);
     return _db.collection('brands').doc(newBrand.id).update(newBrand.toMap());
   }
 }
@@ -44,40 +48,26 @@ DatabaseService<TaskModel> newTaskDB = DatabaseService<TaskModel>("tasks",
 //************************************************************************//
 //************************************************************************//
 class NewTaskDB {
+
   static final NewTaskDB _newTaskDB = NewTaskDB._internal();
-  FirebaseFirestore _db = FirebaseFirestore.instance;
   NewTaskDB._internal();
 
   factory NewTaskDB() {
     return _newTaskDB;
   }
 
-  // Future<List<TaskModel>> getAllTasks() async {
-  //   var snap = await _db.collection('tasks').get();
-  //   return snap.docs
-  //       .map((doc) => new TaskModel.fromTask(doc.data(), doc.id))
-  //       .toList();
-  // }
-
-  // Future<List<TaskModel>> getBrandTasks(String name) async {
-  //   var snap =
-  //       await _db.collection('tasks').where('name', isEqualTo: name).get();
-
-  //   return snap.docs
-  //       .map((doc) => new TaskModel.fromTask(doc.data(), doc.id))
-  //       .toList();
-  // }
-
   Future<void> addNewTask(TaskModel taskModel) {
     return _db.collection('tasks').add(taskModel.toTask());
   }
 
   Future<void> deleteTask(String id) {
+    //print(id);
     return _db.collection('tasks').doc(id).delete();
   }
 
   Future<void> updateTask(TaskModel taskModel) {
-    return _db.collection('tasks').doc(taskModel.id).set(taskModel.toTask());
+    //print(taskModel.id);
+    return _db.collection('tasks').doc(taskModel.id).update(taskModel.toTask());
   }
 }
 
@@ -86,7 +76,6 @@ class NewTaskDB {
 //Users CRUD Functions
 class UsersDB {
   static final UsersDB _userDB = UsersDB._internal();
-  FirebaseFirestore _db = FirebaseFirestore.instance;
   UsersDB._internal();
 
   factory UsersDB() {
@@ -98,9 +87,9 @@ class UsersDB {
         .where('isEmployee', isEqualTo: true)
         .get();
     return snap.docs
-            .map((doc) => new User.fromMap(doc.data(), doc.id))
+        .map((doc) => new User.fromMap(doc.data(), doc.id))
         .toList();
-   
+
     // .then((QuerySnapshot querySnapshot) => {
     //       querySnapshot.docs.forEach((doc) {
 
@@ -118,7 +107,6 @@ class NewAccountBreifDB {
   NewAccountBreifDB._internal();
   static final NewAccountBreifDB _newAccountBreifDB =
       NewAccountBreifDB._internal();
-  FirebaseFirestore _db = FirebaseFirestore.instance;
 
   factory NewAccountBreifDB() {
     return _newAccountBreifDB;

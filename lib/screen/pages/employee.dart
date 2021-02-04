@@ -65,21 +65,21 @@ class _EmployeeState extends State<Employee> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Week Tasks '),
       ),
       body: StreamBuilder<List<TaskModel>>(
-        //Solving problem of filtering tasks*********
+        //Solving problem of filtering tasks*************************
         stream: newTaskDB.streamList().map((event) =>
-            event.where((element) => element.assignedemployeeId == userId).toList()),
+            event.where((element) => element.assignedemployeeMail == userId).toList()),
         builder:
             (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
           if (snapshot.hasData) {
             List<TaskModel> brandTasks = snapshot.data;
             if (brandTasks.isNotEmpty) {
               _tasks = _groupTasks(brandTasks);
-              print(brandTasks.length);
             }
           }
           return SingleChildScrollView(

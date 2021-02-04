@@ -68,35 +68,36 @@ class _CalenderState extends State<Calender> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                TableCalendar(
-                  events: _tasks,
-                  initialCalendarFormat: CalendarFormat.month,
-                  calendarStyle: CalendarStyle(
-                    canEventMarkersOverflow: true,
-                    todayColor: Colors.orange,
-                    selectedColor: Theme.of(context).primaryColor,
-                    todayStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.white),
-                  ),
-                  headerStyle: HeaderStyle(
-                    centerHeaderTitle: true,
-                    formatButtonDecoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(20.0),
+                Card(
+                  child: TableCalendar(
+                    events: _tasks,
+                    initialCalendarFormat: CalendarFormat.month,
+                    calendarStyle: CalendarStyle(
+                      canEventMarkersOverflow: true,
+                      todayColor: Colors.orange,
+                      selectedColor: Theme.of(context).primaryColor,
+                      todayStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                          color: Colors.white),
                     ),
-                    formatButtonTextStyle: TextStyle(color: Colors.white),
-                    formatButtonShowsNext: false,
-                  ),
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  onDaySelected: (date, events) {
-                    setState(() {
-                      _selectedTasks = events;
-                    });
-                  },
-                  builders: CalendarBuilders(
-                    selectedDayBuilder: (context, date, events) => Container(
+                    headerStyle: HeaderStyle(
+                      centerHeaderTitle: true,
+                      formatButtonDecoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      formatButtonTextStyle: TextStyle(color: Colors.white),
+                      formatButtonShowsNext: false,
+                    ),
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    onDaySelected: (date, events) {
+                      setState(() {
+                        _selectedTasks = events;
+                      });
+                    },
+                    builders: CalendarBuilders(
+                      selectedDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -106,19 +107,20 @@ class _CalenderState extends State<Calender> {
                           date.day.toString(),
                           style: TextStyle(color: Colors.white),
                         ),
-                        ),
-                    todayDayBuilder: (context, date, events) => Container(
-                        margin: const EdgeInsets.all(4.0),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Text(
-                          date.day.toString(),
-                          style: TextStyle(color: Colors.white),
-                        )),
+                      ),
+                      todayDayBuilder: (context, date, events) => Container(
+                          margin: const EdgeInsets.all(4.0),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Text(
+                            date.day.toString(),
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    ),
+                    calendarController: _controller,
                   ),
-                  calendarController: _controller,
                 ),
                 ..._selectedTasks.map((task) => ListTile(
                       title: Text(task.name),

@@ -95,9 +95,10 @@ class _AddANewBrandPageState extends State<AddNewBrandPage> {
                           id: widget.newBrand.id,
                         );
                         await NewBrandDB().updateBrandName(newBrand);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       } else {
                         _addNewBrand();
-
                         Navigator.pop(context);
                       }
                     } catch (e) {

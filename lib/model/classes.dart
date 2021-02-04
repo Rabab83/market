@@ -1,5 +1,3 @@
-import 'package:firebase_helpers/firebase_helpers.dart';
-
 class NewBrand {
   final String name;
   final String email;
@@ -28,8 +26,10 @@ class TaskModel {
   final String name;
   final String description;
   final DateTime taskdate;
+  final DateTime endDate;
   final String id;
   final String assignedemployeeId;
+  final String assignedemployeeMail;
   final String employeeId;
 
   TaskModel({
@@ -37,10 +37,11 @@ class TaskModel {
     this.name,
     this.description,
     this.taskdate,
+    this.endDate,
     this.id,
     this.employeeId,
     this.assignedemployeeId,
-    
+    this.assignedemployeeMail,
   });
 
   factory TaskModel.fromTask(Map<String, dynamic> data, String id) {
@@ -48,13 +49,16 @@ class TaskModel {
       aBid: data['aBid'],
       name: data['name'],
       description: data['description'],
-      taskdate: data['taskdate'].toDate(),
+      taskdate: data['taskdate'],
+      endDate:
+          data['endDate'] != null ? data['endDate'] : null,
       employeeId: data['employeeId'],
-      assignedemployeeId:data['assignedemployeeId'],
+      assignedemployeeId: data['assignedemployeeId'],
+      assignedemployeeMail: data['assignedemployeeMail'],
       id: id,
     );
   }
-  //         //convert snapshot into TaskModel
+  //convert snapshot into TaskModel
   factory TaskModel.fromDS(String id, Map<String, dynamic> data) {
     return TaskModel(
       id: id,
@@ -62,8 +66,11 @@ class TaskModel {
       name: data['name'],
       description: data['description'],
       taskdate: data['taskdate'].toDate(),
+      endDate:
+          data['endDate'] != null ? data['endDate'].toDate() : null,
       employeeId: data['employeeId'],
-      assignedemployeeId:data['assignedemployeeId'],
+      assignedemployeeId: data['assignedemployeeId'],
+      assignedemployeeMail: data['assignedemployeeMail'],
     );
   }
 
@@ -73,8 +80,10 @@ class TaskModel {
       "name": name,
       "description": description,
       "taskdate": taskdate,
+      "endDate": endDate,
       "employeeId": employeeId,
-      'assignedemployeeId':assignedemployeeId,
+      'assignedemployeeId': assignedemployeeId,
+      'assignedemployeeMail': assignedemployeeMail,
     };
   }
 }

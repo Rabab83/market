@@ -31,11 +31,12 @@ class ViewBrands extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: ListTile(
-                      title: Text(newBrand.name),  //Brand Name
+                      title: Text(newBrand.name), // view Brand Name
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           IconButton(
+                            // Edit brand name or email
                             color: Colors.deepPurple,
                             icon: Icon(Icons.edit),
                             onPressed: () => Navigator.push(
@@ -47,6 +48,7 @@ class ViewBrands extends StatelessWidget {
                             ),
                           ),
                           IconButton(
+                            // delete brand
                             color: Colors.red,
                             icon: Icon(Icons.delete),
                             onPressed: () => _deleteBrand(context, newBrand.id),
@@ -57,10 +59,10 @@ class ViewBrands extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
-                              BrandFile(aBid: newBrand.id,
-                               name: newBrand.name),
+                              BrandFile(aBid: newBrand.id, name: newBrand.name),
                         ),
                       ),
+                       onLongPress: (){},
                     ),
                   ),
                 ),
@@ -73,7 +75,9 @@ class ViewBrands extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (_) => AddNewBrandPage()));
+            context,
+            MaterialPageRoute(builder: (_) => AddNewBrandPage()),
+          );
         },
       ),
     );

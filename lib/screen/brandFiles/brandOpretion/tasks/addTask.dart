@@ -3,23 +3,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:marketApp/model/classes.dart';
-import 'package:marketApp/screen/brandFiles/brandOpretion/viewEmployeeList.dart';
 import 'package:marketApp/services/auth.dart';
 import 'package:marketApp/services/crudFunctions.dart';
-import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 
-final employeesRef = FirebaseFirestore.instance
-    .collection('users')
-    .where('isEmployee ', isEqualTo: true);
+// final employeesRef = FirebaseFirestore.instance
+//     .collection('users')
+//     .where('isEmployee ', isEqualTo: true).get();
+final usersRef = FirebaseFirestore.instance.collection('users');
 
 class AddTaskPage extends StatefulWidget {
   final TaskModel taskModel;
   final String aBid;
-
+  //final DateTime selectedDate;
   const AddTaskPage({
     Key key,
     this.taskModel,
     this.aBid,
+    // this.selectedDate
   }) : super(key: key);
 
   @override
@@ -29,21 +29,17 @@ class AddTaskPage extends StatefulWidget {
 TextEditingController _nameController;
 TextEditingController _descriptionController;
 DateTime _taskDate;
+DateTime _endDate;
 
 class _AddTaskPageState extends State<AddTaskPage> {
   // GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
-  List<String> employeesNames = <String>[
-    '',
-    'Ahmed',
-    'Mohammed',
-    'Mahmoud',
-    'Ali',
-    'Mamdouh',
-  ];
-  String employeeName = '';
+  List<dynamic> employeesNames = [];
+  List<String> employees = [];
+
+  var employeeName;
   bool _initialized = false;
   bool _error = false;
 
@@ -66,26 +62,32 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   void initState() {
     initializeFlutterFire();
-    super.initState();
     _nameController =
         TextEditingController(text: isEditMode ? widget.taskModel.name : '');
     _descriptionController = TextEditingController(
         text: isEditMode ? widget.taskModel.description : '');
     _taskDate = DateTime.now();
+    _endDate = DateTime.now();
     processing = false;
-    // getEmployees();
+    _getEmployees();
+    super.initState();
   }
 
-  // getEmployees() {
-  //   setState(() {
-  //     employeesRef.get().then((QuerySnapshot querySnapshot) => {
-  //           querySnapshot.docs.forEach((doc) {
-  //             print(doc["userName"]);
-  //             employeesNames.add(doc["userName"]);
-  //           })
-  //         });
-  //   });
-  // }
+  _getEmployees() async {
+    final docRef = await usersRef.get();
+    setState(() {
+      docRef.docs.forEach((doc) {
+        if (doc.data()['isEmployee'] == true) {
+          employeesNames.add(doc.data()['userName']);
+          //print(employeesNames);
+        }
+      });
+      employeesNames.forEach((element) {
+        employees.add(element.toString());
+      });
+      print(employees);
+    });
+  }
 
   get isEditMode => widget.taskModel != null;
 
@@ -94,6 +96,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditMode ? 'Edit Task' : 'Add New Task'),
+        leading: IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       key: _key,
       body: new SafeArea(
@@ -105,15 +111,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
             alignment: Alignment.center,
             child: ListView(
               children: <Widget>[
+                // Add title of task
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
                   child: TextFormField(
+                    //initialValue: widget.taskModel?.name,
                     controller: _nameController,
-                    validator: (value) =>
-                        (value.isEmpty) ? "Please Enter Brand Name" : null,
+                    validator: (value) => (value.isEmpty)
+                        ? "Add a title to this task or brand Name "
+                        : null,
                     decoration: InputDecoration(
-                      labelText: "Name",
+                      labelText: "title",
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -122,10 +131,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     ),
                   ),
                 ),
+                SizedBox(height: 10.0),
+                Divider(),
+                // Add Description of the task
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
                   child: TextFormField(
+                    //initialValue: widget.taskModel?.description,
                     controller: _descriptionController,
                     minLines: 3,
                     maxLines: 5,
@@ -136,12 +149,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      //icon: Icon(Icons.short_text),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10.0),
+                SizedBox(height: 10.0),
+                Divider(),
+                // choosing a start date of the task
                 ListTile(
-                  title: Text("Date (YYYY-MM-DD)"),
+                  trailing: Icon(Icons.calendar_today_sharp),
+                  title: Text("Stert Date (YYYY-MM-DD)"),
                   subtitle: Text(
                       "${_taskDate.year} - ${_taskDate.month} - ${_taskDate.day}"),
                   onTap: () async {
@@ -158,36 +175,79 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   },
                 ),
                 SizedBox(height: 10.0),
-                new FormField(
-                  builder: (FormFieldState state) {
-                    return InputDecorator(
-                      decoration: InputDecoration(
-                        icon: const Icon(Icons.person),
-                        labelText: 'Employees',
-                      ),
-                      isEmpty: employeeName == '',
-                      child: new DropdownButtonHideUnderline(
-                        child: new DropdownButton(
-                          value: employeeName,
-                          isDense: true,
-                          onChanged: (String newValue) {
-                            setState(() {
-                              employeeName = newValue;
-                              state.didChange(newValue);
-                            });
-                          },
-                          items: employeesNames.map((String value) {
-                            return new DropdownMenuItem(
-                              value: value,
-                              child: new Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    );
+                Divider(),
+                // choosing a end date of the task
+                ListTile(
+                  trailing: Icon(Icons.calendar_today_sharp),
+                  title: Text("End Date (YYYY-MM-DD)"),
+                  subtitle: Text(
+                      "${_endDate.year} - ${_endDate.month} - ${_endDate.day}"),
+                  onTap: () async {
+                    DateTime picked = await showDatePicker(
+                        context: context,
+                        initialDate: _endDate == null ? null : _endDate,
+                        firstDate: DateTime(_endDate.year - 5),
+                        lastDate: DateTime(_endDate.year + 5));
+                    if (picked != null) {
+                      //var startDate = _taskDate;
+                      // if (_endDate == null) return null;
+                      if (_taskDate.millisecondsSinceEpoch >
+                          picked.millisecondsSinceEpoch) {
+                        return "End Date can not be before Start Date";
+                      } else {
+                        setState(() {
+                          _endDate = picked;
+                        });
+                      }
+                    } else {
+                      _endDate = null;
+                    }
                   },
                 ),
+                // FormBuilderDateTimePicker(),
+                SizedBox(height: 10.0),
+                Divider(),
+                // Choose the employee to send him a task
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: new FormField(
+                    builder: (FormFieldState state) {
+                      return InputDecorator(
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.person),
+                          labelText: 'Employees',
+                          filled: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(1),
+                        ),
+                        isEmpty: employeeName == '',
+                        child: new DropdownButtonHideUnderline(
+                          child: new DropdownButton(
+                            value: employeeName,
+                            isDense: true,
+                            onChanged: (var newValue) {
+                              setState(() {
+                                employeeName = newValue;
+                                state.didChange(newValue);
+                              });
+                            },
+                            items: employees.map((var value) {
+                              return new DropdownMenuItem(
+                                value: value,
+                                child: new Text(value.toString()),
+                              );
+                            }).toList(),
+                            //hint: Text('Choose an Employee to have this task'),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
                 SizedBox(height: 20.0),
+                Divider(),
+                // Save or update Button
                 processing
                     ? Center(child: CircularProgressIndicator())
                     : Padding(
@@ -199,9 +259,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           child: MaterialButton(
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
+                                final userId =
+                                    FirebaseAuth.instance.currentUser.email;
+                                final empN = await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userId)
+                                    .get();
+                                final empName = empN.data()['userName'];
                                 setState(() {
                                   processing = true;
                                 });
+                                // Update exist Task
                                 if (widget.taskModel != null) {
                                   TaskModel taskModel = TaskModel(
                                     name: _nameController.text.trim(),
@@ -209,26 +277,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                         _descriptionController.text.trim(),
                                     id: widget.taskModel.id,
                                     taskdate: widget.taskModel.taskdate,
+                                    endDate: widget.taskModel.endDate,
                                     assignedemployeeId: employeeName,
+                                    assignedemployeeMail: userId,
+                                    employeeId: empName,
                                   );
                                   await NewTaskDB().updateTask(taskModel);
                                 } else {
-                                  final userId =
-                                      FirebaseAuth.instance.currentUser.email;
-                                  final empN = await FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(userId)
-                                      .get();
-                                  final empName = empN.data()['userName'];
-                                  print(empName);
+                                  // Add New Task
                                   await NewTaskDB().addNewTask(
                                     TaskModel(
                                       name: _nameController.text.trim(),
                                       description:
                                           _descriptionController.text.trim(),
                                       taskdate: _taskDate,
+                                      endDate: _endDate,
                                       aBid: widget.aBid,
                                       assignedemployeeId: employeeName,
+                                      assignedemployeeMail: userId,
                                       employeeId: empName,
                                     ),
                                   );
